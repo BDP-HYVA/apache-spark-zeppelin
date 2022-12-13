@@ -1,15 +1,15 @@
+# zeppelin notebook
 %spark2.pyspark
 
 from pyspark.sql.functions import *
 from pyspark.sql.functions import date_format
 
-textfile = sc.textFile("hdfs:///user/maria_dev/final/my_real_love.csv")
-counts = textfile.flatMap(lambda line: line.split(","))\
-.map(lambda line: (line.split(" ")[0],1))\
-.reduceByKey(lambda a, b: a+b)\
-.sortBy(lambda x: x[1], ascending=False)
+textfile = sc.textFile("hdfs:///user/maria_dev/final/preprocessed_data.csv")
+ans = textfile.flatMap(lambda line: line.split(","))\
+  .map(lambda line: (line.split(" ")[0],1))\
+  .reduceByKey(lambda a, b: a+b)\
+  .sortBy(lambda x: x[1], ascending=False)
 
+final_ans = ans.toDF()
 
-counts2 = counts.toDF()
-
-z.show(counts2)
+z.show(final_ans)
